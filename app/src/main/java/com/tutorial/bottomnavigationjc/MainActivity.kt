@@ -1,20 +1,26 @@
 package com.tutorial.bottomnavigationjc
 
 import android.annotation.SuppressLint
-import android.graphics.Paint.Align
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -28,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -158,11 +165,46 @@ fun BottomNavigationBar(
 
 @Composable
 fun HomeScreen(){
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ){
-        Text("Home Screen")
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        items(20){//membuat 20 list
+            Card(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 8.dp
+                ),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = "en: If debugging is the process of removing software bugs, then programming must be the process of putting them in.",
+                        fontSize = 14.sp,
+                        color = Color.Green
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "author: Edsger W. Dijkstra",
+                        fontSize = 12.sp,
+                        color = Color.Green
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "rating: 4.7",
+                        fontSize = 12.sp,
+                        color = Color.Blue
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
     }
 }
 
@@ -183,5 +225,45 @@ fun SettingsScreen(){
         contentAlignment = Alignment.Center
     ){
         Text("Settings Screen")
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview
+fun ScreenPreview(){
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                items = listOf(
+                    BottomItem(
+                        name = "Home",
+                        route = "home",
+                        icon = Icons.Default.Home,
+                        badgeIcon = 0
+                    ),
+                    BottomItem(
+                        name = "Chat",
+                        route = "chat",
+                        icon = Icons.Default.Notifications,
+                        badgeIcon = 12
+                    ),
+                    BottomItem(
+                        name = "Settings",
+                        route = "setting",
+                        icon = Icons.Default.Settings,
+                        badgeIcon = 0
+                    )
+                ),
+                navController = navController,
+                onItemClick = {
+                    navController.navigate(it.route)
+                }
+            )
+        }
+    ) {
+        Navigation(navController = navController)
     }
 }
